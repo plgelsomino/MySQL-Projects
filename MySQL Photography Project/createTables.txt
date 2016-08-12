@@ -1,0 +1,128 @@
+CREATE TABLE Client(
+	clientId			VARCHAR(10),
+	clientFirstName		VARCHAR(20),
+	clientLastName		VARCHAR(20),
+	clientStreet		VARCHAR(50),
+	clientCity			VARCHAR(20),
+	clientState			CHAR(2),
+	clientZip			CHAR(5),
+	clientAreaCode		CHAR(3),
+	clientPhone			CHAR(7),
+	CONSTRAINT Client_clientId_pk PRIMARY KEY (clientId)
+);
+
+CREATE TABLE Meeting(
+	clientId 			VARCHAR(10),
+	meetDate			DATE,
+	meetTime			TIME,
+	repName				VARCHAR(20),
+	CONSTRAINT Meeting_clientId_meetDate_pk PRIMARY KEY (clientId, meetDate),
+	CONSTRAINT Meeting_clientId_fk FOREIGN KEY (clientId) REFERENCES Client(clientId)
+);
+
+CREATE TABLE Photographer(
+	empId				VARCHAR(10),
+	empFirstName		VARCHAR(20),
+	empLastName			VARCHAR(20),
+	empStreet			VARCHAR(50),
+	empCity				VARCHAR(20),
+	empState			CHAR(2),
+	empZip				CHAR(5),
+	empAreaCode			CHAR(3),
+	empPhoneNumber		CHAR(7),
+	CONSTRAINT Photographer_empId_pk PRIMARY KEY (empId)
+);
+
+CREATE TABLE Booking (
+	clientId			VARCHAR(10),
+	bookingDate			DATE,
+	bookingTime			TIME,
+	duration			CHAR(3),
+	type				VARCHAR(20),
+	empId1				VARCHAR(10),
+	empId2				VARCHAR(10),
+	CONSTRAINT Booking_clientId_bookingDate_pk PRIMARY KEY (clientId, bookingDate),
+	CONSTRAINT Booking_empId1_fk FOREIGN KEY (empId1) REFERENCES Photographer (empId),
+	CONSTRAINT Booking_empId2_fk FOREIGN KEY (empId2) REFERENCES Photographer (empId)
+);
+
+CREATE TABLE Package (
+	pkgNo				VARCHAR(10),
+	numWallet			CHAR(3),
+	num5x7				CHAR(3),
+	num8x10				CHAR(3),
+	num11x14			CHAR(3),
+	num16x20			CHAR(3),
+	albumType			VARCHAR(20),
+	albumPages			VARCHAR(20),
+	albumCover			VARCHAR(20),
+	price				DECIMAL(10, 2),
+	CONSTRAINT Package_pkgNo_pk PRIMARY KEY (pkgNo)
+);
+
+CREATE TABLE Job (
+	contractNo			VARCHAR(10),
+	type				VARCHAR(20),
+	eventName			VARCHAR(20),
+	location			VARCHAR(20),
+	clientId			VARCHAR(10),
+	date				DATE,
+	time				TIME,
+	duration			CHAR(3),
+	cost				DECIMAL(10, 2),
+	empId1				VARCHAR(10),
+	empId2				VARCHAR(10),
+	pkgNo				VARCHAR(10),
+	totalCost			DECIMAL(10, 2),
+	amtPaid				DECIMAL(10, 2),
+	amtDue				DECIMAL(10, 2),
+	CONSTRAINT Job_contractNo_pk PRIMARY KEY (contractNo),
+	CONSTRAINT Job_clientId_fk FOREIGN KEY (clientId) REFERENCES Client (clientId),
+	CONSTRAINT Job_empId1_fk FOREIGN KEY (empId1) REFERENCES Photographer (empId),
+	CONSTRAINT Job_empId2_fk FOREIGN KEY (empId2) REFERENCES Photographer (empId),
+	CONSTRAINT Job_pkgNo_fk FOREIGN KEY (pkgNo) REFERENCES Package (pkgNo)
+);
+
+CREATE TABLE Proof (
+	contractNo			VARCHAR(10),
+	proofNo				VARCHAR(10),
+	quality				VARCHAR(50),
+	CONSTRAINT Proof_contractNo_proofNo_pk PRIMARY KEY (contractNo, proofNo),
+	CONSTRAINT Proof_contractNo_fk FOREIGN KEY (contractNo) REFERENCES Job (contractNo)
+);
+
+CREATE TABLE Order1 (
+	orderNo				VARCHAR(10),
+	dateOrdered			DATE,
+	totalAmount			CHAR(3),
+	pkgNo				VARCHAR(10),
+	contractNo			VARCHAR(10),
+	CONSTRAINT Order_orderNo_pk PRIMARY KEY (orderNo),
+	CONSTRAINT Order_pkgNo_fk FOREIGN KEY (pkgNo) REFERENCES Package (pkgNo),
+	CONSTRAINT Order_contractNo_fk FOREIGN KEY (contractNo) REFERENCES Job (contractNo)
+);
+
+CREATE TABLE OrderItem (
+	orderNo				VARCHAR(10),
+	proofNo				VARCHAR(10),
+	size				VARCHAR(10),
+	quantity			CHAR(3),
+	dateDelivered			DATE,
+	CONSTRAINT OrderItem_orderNo_proofNo_pk PRIMARY KEY (orderNo, proofNo),
+	CONSTRAINT OrderItem_orderNo_fk FOREIGN KEY (orderNo) REFERENCES Order1 (orderNo)
+);
+
+CREATE TABLE Payment (
+	contractNo			VARCHAR(10),
+	datePaid			DATE,
+	payType				VARCHAR(10),
+	amount				DECIMAL(10, 2),
+	CONSTRAINT Payment_contractNo_datePaid_pk PRIMARY KEY (contractNo, datePaid),
+	CONSTRAINT Payment_contractNo_fk FOREIGN KEY (contractNo) REFERENCES Job (contractNo)
+);
+
+
+
+
+
+

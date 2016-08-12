@@ -1,0 +1,59 @@
+insert into Client values('0001234531', 'Alejandro', 'Rodriguez', '1102 Beech Street', 'San Diego', 'CA','11675','457', '5757677');
+insert into Client values('0001249076', 'Mariam', 'Choudhry', '565 Main Street', 'San Francisco', 'CA','11676','457', '5767667');
+insert into Client values('0001251437', 'Barry', 'Berkeley', '75 Hampton Drive', 'Sacramento', 'CA','11774','457', '5784457');
+insert into Client values('0001260037', 'Christina', 'Jones', '102 Delhigh Court', 'San Diego', 'CA','11675','457', '5737097');
+insert into Client values('0001271430', 'Jacob', 'Smith', '62 Elm Street', 'Palm Springs', 'CA','11723','457', '4657637');
+
+insert into Meeting values('0001234531', '2015-06-10', '13:30:00', 'John Hamm');
+insert into Meeting values('0001249076', '2015-06-19', '15:40:00', 'John Hamm');
+insert into Meeting values('0001251437', '2015-07-10', '10:30:00', 'Stacy Jolene');
+insert into Meeting values('0001260037', '2015-08-16', '12:30:00', 'John Hamm');
+insert into Meeting values('0001271430', '2015-08-24', '09:40:00', 'Stacy Jolene');
+
+insert into Photographer values('1110001234', 'Heather', 'Khalifa', '17 High Hedges Street', 'Saint James', 'CA', '11459', '566', '6783476');
+insert into Photographer values('1110001235', 'Chelsea', 'Kats', '88 Ninth Street', 'Sacramento', 'CA', '11774', '457', '6459468');
+insert into Photographer values('1110001236', 'Terry', 'Richardson', '63 Bonds Drive', 'San Diego', 'CA', '11675', '457', '6783476');
+insert into Photographer values('1110001237', 'Louie', 'Olivier', '345 Ludlow Court', 'Palm Springs', 'CA', '11723', '457', '8738646');
+insert into Photographer values('1110001238', 'Hugo', 'Johnson', '412 Joplin Boulevard', 'Sacramento', 'CA', '11774', '457', '7583385');
+
+insert into Booking values ('0001234531', '2016-01-04', '16:15:00', '5Hr', 'wedding', '1110001234', '1110001235');
+insert into Booking values ('0001249076', '2015-07-07', '18:30:00', '1Hr', 'portrait', '1110001234', null);
+insert into Booking values ('0001251437', '2015-07-07', '12:00:00', '2Hr', 'graduation', '1110001236', '1110001238');
+insert into Booking values ('0001260037', '2015-08-10', '15:00:00', '2Hr', 'birthday', '1110001234', '1110001236');
+insert into Booking values ('0001271430', '2015-11-17', '9:30:00', '1Hr', 'portrait', '1110001235', null);
+
+insert into Package values ('9090677700', '1', '4', '2', '5', '1', 'Classic 3-Ring', '10', 'leather', '105.00');  
+insert into Package values ('9090677711', '2', '2', '2', '2', '2', 'Memo', '15', 'Croc', '120.00');  
+insert into Package values ('9090677712', '1', '8', '2', '1', '2', 'Scrapbook', '11', 'Linen', '50.00');  
+insert into Package values ('9090677732', '4', '4', '1', '5', '4', '4-Ring', '20', 'leather', '112.00');  
+insert into Package values ('9090677755', '3', '4', '5', '3', '2', 'Specialty', '40', 'Croc', '200.00');  
+
+insert into Job values ('4546708865', 'wedding', 'JeraiWed', 'Venetian', '0001234531', '2016-01-04', '16:15:00', '5Hr', '400.00', '1110001234', '1110001235', '9090677700', '505.00', '205.00', '300.00');
+insert into Job values ('4546708866', 'portrait', 'HyattPort', 'Office', '0001249076', '2015-07-07', '18:30:00', '1Hr',  '200.00', '1110001234', null, '9090677711', '320.00', '100.00', '220.00');
+insert into Job values ('4546708867', 'graduation', 'LawGrad', 'Touro', '0001251437', '2015-07-07', '12:00:00', '2Hr', '500.00', '1110001236', '1110001238', '9090677712', '550.00', '150.00', '400.00');
+insert into Job values ('4546708868', 'birthday', 'WoodBirth', 'Prime', '0001260037', '2015-08-10', '15:00:00', '2Hr', '100.00', '1110001234', '1110001236', '9090677732', '212.00', '62', '150.00');
+insert into Job values ('4546708869', 'portrait', 'GoldPort', 'Office', '0001271430', '2015-11-17', '9:30:00', '1Hr', '200.00', '1110001235', null, '9090677755', '400.00', '50.00', '350.00');
+
+insert into Proof values ('4546708865', '1112225656', 'Good');
+insert into Proof values ('4546708866', '1112225767', 'Excellent');
+insert into Proof values ('4546708867', '1112225858', 'Excellent');
+insert into Proof values ('4546708868', '1112225959', 'Good');
+insert into Proof values ('4546708869', '1112221010', 'Fair');
+
+insert into Order1 values ('2324252627', '2016-02-14', '505', '9090677700', '4546708865');
+insert into Order1 values ('2323267600', '2015-08-10', '320', '9090677711', '4546708866');
+insert into Order1 values ('2324200451', '2015-09-02', '550', '9090677712', '4546708867');
+insert into Order1 values ('2324233990', '2015-10-20', '212', '9090677732', '4546708868');
+insert into Order1 values ('2324256349', '2016-01-09', '400', '9090677755', '4546708869');
+
+insert into OrderItem values ('2324252627', '4546708865', '8x10', '2', '2016-03-01');
+insert into OrderItem values ('2323267600', '4546708866', '5x7', '2', '2015-09-11');
+insert into OrderItem values ('2324200451', '4546708867', '8x10', '2', '2015-09-28');
+insert into OrderItem values ('2324233990', '4546708868', '11x14', '5', '2015-11-05');
+insert into OrderItem values ('2324256349', '4546708869', '16x20', '2', '2016-02-10');
+
+insert into Payment values ('4546708865', '2016-02-14', 'Cash', '200');
+insert into Payment values ('4546708866', '2015-08-10', 'Check', '50');
+insert into Payment values ('4546708867', '2015-09-02', 'Visa', '100');
+insert into Payment values ('4546708868', '2015-10-20', 'Visa', '110');
+insert into Payment values ('4546708869', '2016-01-09', 'Cash', '70');

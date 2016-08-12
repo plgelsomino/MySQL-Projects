@@ -1,0 +1,337 @@
+1. Find the client booking date and time, client first and last name and order by last name
+SELECT  clientLastName, clientFirstName, bookingDate, bookingTime
+FROM Booking, Client
+WHERE Booking.clientId = Client.clientId
+ORDER BY clientLastName ASC;
+
++----------------+-----------------+-------------+-------------+
+| clientLastName | clientFirstName | bookingDate | bookingTime |
++----------------+-----------------+-------------+-------------+
+| Berkeley       | Barry           | 2015-07-07  | 12:00:00    |
+| Choudhry       | Mariam          | 2015-07-07  | 18:30:00    |
+| Jones          | Christina       | 2015-08-10  | 15:00:00    |
+| Rodriguez      | Alejandro       | 2016-01-04  | 16:15:00    |
+| Smith          | Jacob           | 2015-11-17  | 09:30:00    |
++----------------+-----------------+-------------+-------------+
+
+2. Find the event information and client name for all jobs scheduled for photographer  "*******", in chronological order.
+SELECT clientFirstName, clientLastName, bookingDate, bookingTime, type, empFirstName, empLastName
+FROM Client, Booking, Photographer
+WHERE Client.clientId = Booking.clientId AND Booking.empId1 AND Booking.empId1 = Photographer.empId
+ORDER BY empLastName ASC;
+
++-----------------+----------------+-------------+-------------+------------+---
+-----------+-------------+
+| clientFirstName | clientLastName | bookingDate | bookingTime | type       | em
+pFirstName | empLastName |
++-----------------+----------------+-------------+-------------+------------+---
+-----------+-------------+
+| Jacob           | Smith          | 2015-11-17  | 09:30:00    | portrait   | Ch
+elsea      | Kats        |
+| Christina       | Jones          | 2015-08-10  | 15:00:00    | birthday   | He
+ather      | Khalifa     |
+| Alejandro       | Rodriguez      | 2016-01-04  | 16:15:00    | wedding    | He
+ather      | Khalifa     |
+| Mariam          | Choudhry       | 2015-07-07  | 18:30:00    | portrait   | He
+ather      | Khalifa     |
+| Barry           | Berkeley       | 2015-07-07  | 12:00:00    | graduation | Te
+rry        | Richardson  |
++-----------------+----------------+-------------+-------------+------------+---
+-----------+-------------+
+
+3. Find the names of all clients who were interviewed after January 1, 2014.
+SELECT clientLastName, clientFirstName, meetDate
+FROM Client, Meeting
+WHERE meetDate> '01-01-15' AND Client.clientId = Meeting.clientId;	
+
++----------------+-----------------+------------+
+| clientLastName | clientFirstName | meetDate   |
++----------------+-----------------+------------+
+| Rodriguez      | Alejandro       | 2015-06-10 |
+| Choudhry       | Mariam          | 2015-06-19 |
+| Berkeley       | Barry           | 2015-07-10 |
+| Jones          | Christina       | 2015-08-16 |
+| Smith          | Jacob           | 2015-08-24 |
++----------------+-----------------+------------+
+
+4. Find which clients had 2 photographers at their events and the event name.
+
+SELECT clientFirstName, clientLastName, empId1, empId2, eventName
+FROM Client, Job
+WHERE Client.clientId = Job.clientId AND empId2 IS NOT NULL;
+
++-----------------+----------------+------------+------------+-----------+
+| clientFirstName | clientLastName | empId1     | empId2     | eventName |
++-----------------+----------------+------------+------------+-----------+
+| Alejandro       | Rodriguez      | 1110001234 | 1110001235 | JeraiWed  |
+| Barry           | Berkeley       | 1110001236 | 1110001238 | LawGrad   |
+| Christina       | Jones          | 1110001234 | 1110001236 | WoodBirth |
++-----------------+----------------+------------+------------+-----------+
+
+15.For any proof with quality below "excellent", find the name of the main photographer for the job.
+
+SELECT quality, Proof.contractNo, empId1
+FROM Proof, Job
+WHERE Proof.contractNo = Job.contractNo AND quality = 'excellent';
+
++-----------+------------+------------+
+| quality   | contractNo | empId1     |
++-----------+------------+------------+
+| Excellent | 4546708866 | 1110001234 |
+| Excellent | 4546708867 | 1110001236 |
++-----------+------------+------------+
+
+6. Find the contract number, amount owed and client first and last name of the client that owes the most money
+SELECT contractNo, amtDue, clientFirstName, clientLastName
+FROM Job, Client
+WHERE Job.clientId = Client.clientId AND amtDue = (SELECT MAX(amtdue)
+						FROM Job);
++------------+--------+-----------------+----------------+
+| contractNo | amtDue | clientFirstName | clientLastName |
++------------+--------+-----------------+----------------+
+| 4546708867 | 400.00 | Barry           | Berkeley       |
++------------+--------+-----------------+----------------+
+
+7. Find the client meeting time, date, with rep name and client first and last name where client name is Barry
+SELECT meetDate, meetTime, repName, clientFirstName, clientLastName
+FROM Client, Meeting
+WHERE clientFirstName = 'Barry' AND Meeting.clientId = Client.clientId;
+
++------------+----------+--------------+-----------------+----------------+
+| meetDate   | meetTime | repName      | clientFirstName | clientLastName |
++------------+----------+--------------+-----------------+----------------+
+| 2015-07-10 | 10:30:00 | Stacy Jolene | Barry           | Berkeley       |
++------------+----------+--------------+-----------------+----------------+
+
+
+8. Find the contract number, proof number, event name, and location with a type like "por".
+SELECT Proof.contractNo, proofNo, eventName, location
+FROM Job, Proof
+WHERE Job.contractNo = Proof.contractNo AND type like '%por%';
++------------+------------+-----------+----------+
+| contractNo | proofNo    | eventName | location |
++------------+------------+-----------+----------+
+| 4546708866 | 1112225767 | HyattPort | Office   |
+| 4546708869 | 1112221010 | GoldPort  | Office   |
++------------+------------+-----------+----------+
+
+9. Find the clients who have events during the summer (May 01 - Aug 31 2015)
+
+SELECT clientFirstName, clientLastName, bookingDate
+FROM Client, Booking
+WHERE Client.clientId = Booking.clientId AND bookingDate > '2015-05-01' AND bookingDate < '2015-08-30';
+
++-----------------+----------------+-------------+
+| clientFirstName | clientLastName | bookingDate |
++-----------------+----------------+-------------+
+| Mariam          | Choudhry       | 2015-07-07  |
+| Barry           | Berkeley       | 2015-07-07  |
+| Christina       | Jones          | 2015-08-10  |
++-----------------+----------------+-------------+
+
+10.  Get the contract numbers and names of employees working at a Wedding.
+SELECT Job.contractNo, Booking.empId1, Booking.empId2
+FROM Booking, Job
+WHERE Booking.clientId = Job.clientId AND Booking.type = 'Wedding';
+
++------------+------------+------------+
+| contractNo | empId1     | empId2     |
++------------+------------+------------+
+| 4546708865 | 1110001234 | 1110001235 |
++------------+------------+------------+
+
+11. Find the names and telephone numbers of all clients who have made bookings, but have not completed contracts with the studio.
+SELECT clientFirstName, clientLastName, contractNo, amtDue
+FROM Client, Job
+WHERE amtDue > 0 AND Client.clientId = Job.clientId;
+
++-----------------+----------------+------------+--------+
+| clientFirstName | clientLastName | contractNo | amtDue |
++-----------------+----------------+------------+--------+
+| Alejandro       | Rodriguez      | 4546708865 | 300.00 |
+| Mariam          | Choudhry       | 4546708866 | 220.00 |
+| Barry           | Berkeley       | 4546708867 | 400.00 |
+| Christina       | Jones          | 4546708868 | 150.00 |
+| Jacob           | Smith          | 4546708869 | 350.00 |
++-----------------+----------------+------------+--------+
+
+12. Find all the client order information with a total amount over 300.
+SELECT *
+FROM Order1
+WHERE totalAmount >= 300;
+
++------------+-------------+-------------+------------+------------+
+| orderNo    | dateOrdered | totalAmount | pkgNo      | contractNo |
++------------+-------------+-------------+------------+------------+
+| 2323267600 | 2015-08-10  | 320         | 9090677711 | 4546708866 |
+| 2324200451 | 2015-09-02  | 550         | 9090677712 | 4546708867 |
+| 2324252627 | 2016-02-14  | 505         | 9090677700 | 4546708865 |
+| 2324256349 | 2016-01-09  | 400         | 9090677755 | 4546708869 |
++------------+-------------+-------------+------------+------------+
+
+13. Find the total of the payments made by “********  “ for her wedding photography
+
+SELECT clientFirstName, clientLastName, type, amtPaid
+FROM Client, Job
+WHERE Client.clientId = Job.clientId AND type = 'wedding';
+
++-----------------+----------------+---------+---------+
+| clientFirstName | clientLastName | type    | amtPaid |
++-----------------+----------------+---------+---------+
+| Alejandro       | Rodriguez      | wedding |  205.00 |
++-----------------+----------------+---------+---------+
+				
+14. Find the number of proofs made from "**********" portrait sitting.
+
+SELECT type, eventName, totalAmount
+FROM Job, Order1
+WHERE Job.contractNo = Order1.contractNo AND type = 'portrait';
+
++----------+-----------+-------------+
+| type     | eventName | totalAmount |
++----------+-----------+-------------+
+| portrait | HyattPort | 320         |
+| portrait | GoldPort  | 400         |
++----------+-----------+-------------+
+
+15. Get all client id's, first name, and last name of all employees that live in San Diego.
+SELECT clientId, clientLastName, clientFirstName, clientCity
+FROM Client
+WHERE clientCity = 'San Diego';
+
++------------+----------------+-----------------+------------+
+| clientId   | clientLastName | clientFirstName | clientCity |
++------------+----------------+-----------------+------------+
+| 0001234531 | Rodriguez      | Alejandro       | San Diego  |
+| 0001260037 | Jones          | Christina       | San Diego  |
++------------+----------------+-----------------+------------+
+
+16. Create a view that shows the contract number, type of event, location, time, cost, client name and phone number.
+
+CREATE VIEW Vw1
+AS SELECT contractNo, type, location, time, cost, clientFirstName, clientLastName, clientAreaCode, clientPhone
+FROM Job, Client
+WHERE Client.clientId = Job.clientID;
+
+17. From the view in 16 find the clients name, location, time and cost of the event.
+
+SELECT clientFirstName, clientLastName, location, time, cost
+FROM Vw1;
+
++-----------------+----------------+----------+----------+--------+
+| clientFirstName | clientLastName | location | time     | cost   |
++-----------------+----------------+----------+----------+--------+
+| Alejandro       | Rodriguez      | Venetian | 16:15:00 | 400.00 |
+| Mariam          | Choudhry       | Office   | 18:30:00 | 200.00 |
+| Barry           | Berkeley       | Touro    | 12:00:00 | 500.00 |
+| Christina       | Jones          | Prime    | 15:00:00 | 100.00 |
+| Jacob           | Smith          | Office   | 09:30:00 | 200.00 |
++-----------------+----------------+----------+----------+--------+
+
+18. Show the Contract and proof numbers that have the quality "excellent"
+
+SELECT contractNo, proofNo, quality
+FROM Proof
+WHERE quality = 'excellent';
+
++------------+------------+-----------+
+| contractNo | proofNo    | quality   |
++------------+------------+-----------+
+| 4546708866 | 1112225767 | Excellent |
+| 4546708867 | 1112225858 | Excellent |
++------------+------------+-----------+
+
+19. Wihout using amtDue, show the clients name and how much if left that the client owes to the business.
+
+SELECT clientFirstName, clientLastName, (totalCost - amtPaid)
+FROM Job, Client
+WHERE Job.clientId = Client.clientId;
+
++-----------------+----------------+-----------------------+
+| clientFirstName | clientLastName | (totalCost - amtPaid) |
++-----------------+----------------+-----------------------+
+| Alejandro       | Rodriguez      |                300.00 |
+| Mariam          | Choudhry       |                220.00 |
+| Barry           | Berkeley       |                400.00 |
+| Christina       | Jones          |                150.00 |
+| Jacob           | Smith          |                350.00 |
++-----------------+----------------+-----------------------+
+
+20. Count all the clients that Live in California
+
+SELECT COUNT(clientState)
+FROM Client
+WHERE clientState = 'CA';
+
++--------------------+
+| COUNT(clientState) |
++--------------------+
+|                  5 |
++--------------------+
+
+21. Find the total quantity of proofs in the Database.
+
+SELECT SUM(totalAmount)
+from Order1;
+
++------------------+
+| SUM(totalAmount) |
++------------------+
+|             1987 |
++------------------+
+
+22. Count how many clients there are in the database
+SELECT COUNT(clientId)
+FROM Client;
+
++-----------------+
+| COUNT(clientId) |
++-----------------+
+|               5 |
++-----------------+
+
+23. Get the contract numbers and event type and name where there is no second photographer at an event
+SELECT contractNo, eventName, Type
+FROM Job
+WHERE empId2 IS NULL;
+
++------------+-----------+----------+
+| contractNo | eventName | Type     |
++------------+-----------+----------+
+| 4546708866 | HyattPort | portrait |
+| 4546708869 | GoldPort  | portrait |
++------------+-----------+----------+
+
+24. Find all the package information where the price is more than $100
+
+SELECT *
+FROM Package
+WHERE price > 100;
+
+---+------------+------------+--------+
+| pkgNo      | numWallet | num5x7 | num8x10 | num11x14 | num16x20 | albumType
+   | albumPages | albumCover | price  |
++------------+-----------+--------+---------+----------+----------+-------------
+---+------------+------------+--------+
+| 9090677700 | 1         | 4      | 2       | 5        | 1        | Classic 3-Ri
+ng | 10         | leather    | 105.00 |
+| 9090677711 | 2         | 2      | 2       | 2        | 2        | Memo
+   | 15         | Croc       | 120.00 |
+| 9090677732 | 4         | 4      | 1       | 5        | 4        | 4-Ring
+   | 20         | leather    | 112.00 |
+| 9090677755 | 3         | 4      | 5       | 3        | 2        | Specialty
+   | 40         | Croc       | 200.00 |
++------------+-----------+--------+---------+----------+----------+-------------
+---+------------+------------+--------+
+
+25. Find the order Numbers of all the packages with  album types "Scrapbook"
+
+SELECT orderNo, albumtype
+FROM Order1, Package
+WHERE Order1.pkgNo = Package.pkgNo AND albumType = 'Scrapbook';
+
++------------+-----------+
+| orderNo    | albumtype |
++------------+-----------+
+| 2324200451 | Scrapbook |
++------------+-----------+
