@@ -1,1 +1,1 @@
-# MySQL-Projects
+This was a MySQL project for a database class at Pace University. It was a group project assignment to create a small relational database for a simulated photography company. Some of the files included are insert statements, example queries, ER diagram, data dictionary, and tables. 
